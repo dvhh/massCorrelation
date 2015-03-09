@@ -20,19 +20,19 @@ CUDA code is run on Tesla C2075
 
 input : 601 x 45101 matrix 
 
-Baseline Implementation : 977.89
-CUDA : 98.27
-Matrix Implementation : 1008.80
-Matrix CUDA : 142.23
-Multi-threaded : 305.19
-Estimated I/O operation time : 56.64
+- Baseline Implementation : 977.89
+- CUDA : 98.27
+- Matrix Implementation : 1008.80
+- Matrix CUDA : 142.23
+- Multi-threaded : 305.19
+- Estimated I/O operation time : 56.64
 
 for comparison on Intel X5690
 
-Baseline Implementation : 640.27
-Matrix Implementation : 639.95
-Multi-threaded : 82.10
-Estimated I/O operation time : 9.80
+- Baseline Implementation : 640.27
+- Matrix Implementation : 639.95
+- Multi-threaded : 82.10
+- Estimated I/O operation time : 9.80
 
 ## Notes
 
