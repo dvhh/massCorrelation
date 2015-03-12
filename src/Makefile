@@ -34,7 +34,7 @@ $(BIN)/massCorrelation : massCorrelation.o correlationCPU.o
 $(BIN)/massCorrelationNone : massCorrelation.o correlationNone.o
 	$(CC) $(CFLAGS) -o $@ $^ 
 
-$(BIN)/massCorrelationGPU : massCorrelation.o correlationGPU.o
+$(BIN)/massCorrelationCUDA : massCorrelation.o correlationCUDA.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm -L/usr/local/cuda/lib64 -lcudart
 
 #correlationGPU.o : correlationGPU.cu
@@ -46,7 +46,7 @@ $(BIN)/massCorrelationMatrix : massCorrelation.o correlationMatrixCpu.o
 #correlationMatrixGpu.o : correlationMatrixGpu.cu
 #	nvcc -arch compute_20 --ptxas-options=-v --compiler-options "-O2" -c $^ -o $@
 
-$(BIN)/massCorrelationMatrixGpu : massCorrelation.o correlationMatrixGpu.o
+$(BIN)/massCorrelationMatrixCUDA : massCorrelation.o correlationMatrixCUDA.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm -L/usr/local/cuda/lib64 -lcudart
 
 $(BIN)/massCorrelationThread : massCorrelation.o correlationCPUThreads.o threadPool.o ringBuffer.o
