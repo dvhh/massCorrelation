@@ -73,8 +73,8 @@ Timing on [Tegra2 T20][5]
 The CUDA implementation have been quite straight-forward to implement and provided benefits out of the box, Attempt to cleverly optimize the CUDA kernel by using shared memory were unsuccessful ( no performance gained ), and trade-offs were unacceptable ( reducing the number of thread to accomodate the size of the shared memory ).
 While the multi-thread code required some implementation for the threadpool, and might be optimized further by using more specialized queues (which could reduce the time used in allocation ).
 
-[1][http://ark.intel.com/products/52583/Intel-Xeon-Processor-E5606-8M-Cache-2_13-GHz-4_80-GTs-Intel-QPI]
-[2][http://www.nvidia.co.jp/docs/IO/43395/BD-05880-001_v02.pdf]
-[3][http://ark.intel.com/products/52576/Intel-Xeon-Processor-X5690-12M-Cache-3_46-GHz-6_40-GTs-Intel-QPI]
-[4][http://stackoverflow.com/a/18965892/105104]
-[5][http://www.nvidia.com/object/tegra-superchip.html]
+[1]:http://ark.intel.com/products/52583/Intel-Xeon-Processor-E5606-8M-Cache-2_13-GHz-4_80-GTs-Intel-QPI
+[2]:http://www.nvidia.co.jp/docs/IO/43395/BD-05880-001_v02.pdf
+[3]:http://ark.intel.com/products/52576/Intel-Xeon-Processor-X5690-12M-Cache-3_46-GHz-6_40-GTs-Intel-QPI
+[4]:http://stackoverflow.com/a/18965892/105104
+[5]:http://www.nvidia.com/object/tegra-superchip.html
