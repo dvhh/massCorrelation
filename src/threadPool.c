@@ -20,7 +20,7 @@ struct tp_threadpool {
 	rb_ringBuffer_t *jobQueue;
 };
 
-static void tp_active(tp_threadpool_t *pool,int modifier) {
+static void tp_setActive(tp_threadpool_t *pool,int modifier) {
 	pthread_mutex_lock(&(pool->lock));
 	pool->active+=modifier;
 	pthread_mutex_unlock(&(pool->lock));
@@ -33,11 +33,12 @@ static void* tp_workerThread(void* arg) {
 		if(rb_dequeueNonBlocking(pool->jobQueue,&task)) {
 			//=rb_dequeue(pool->jobQueue);
 			//fprintf(stderr,"%02x : working \n",pthread_self());
-			tp_active(pool,1);
+			tp_setActive(pool,1);
 			task->func(task->arg);
 			free(task);
-			tp_active(pool,-1);
+			tp_setActive(pool,-1);
 		}else{
+			pthread_yield();
 			//fprintf(stderr,"%02x : empty queue, pausing\n",pthread_self());
 			//usleep(1000);
 		}
@@ -76,11 +77,15 @@ extern void tp_enqueue(tp_threadpool_t* pool,tp_worker_t* worker,void* arg) {
 extern void tp_wait(tp_threadpool_t* pool) {
 	fprintf(stderr,"waiting completion\n");
 	while(rb_count(pool->jobQueue)>0) {
-		usleep(10000);
+		pthread_yield();
 	}
+	/**
+	right here the queue **SHOULD** be empty,
+	then all that remain is outstanding running tasks
+	**/
 	usleep(1000);
 	while(pool->active>0) {
-		usleep(10000);
+		pthread_yield();
 	}
 }
 

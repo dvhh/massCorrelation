@@ -54,4 +54,8 @@ $(BIN)/massCorrelationThread : massCorrelation.o correlationCPUThreads.o threadP
 
 $(BIN)/compareBin : compareBin.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm
-	
+correlationOMP.o : correlationOMP.c
+	$(CC) $(CFLAGS) -c -fopenmp -o $@ $^ 
+
+$(BIN)/massCorrelationOMP : massCorrelation.o correlationOMP.o
+	$(CC) $(CFLAGS) -fopenmp -o $@ $^ -lm

@@ -62,7 +62,7 @@ static float* readInputVectors(FILE* input,size_t* cols,size_t* rows) {
 					rcols++;
 				}
 			}
-			rcols++;
+			//rcols++; //off by one 
 			size_t size=sizeof(float)*rcols*capacity;
 			fprintf(stderr,"found %zu cols (%zu)\n",rcols,size);
 			result=malloc(size);
@@ -87,6 +87,7 @@ static float* readInputVectors(FILE* input,size_t* cols,size_t* rows) {
 					break;
 			}
 		}
+		assert(idx==rcols);
 		lineRead++;
 		if(lineRead==capacity) { // automatic grow results
 			capacity += 16;
