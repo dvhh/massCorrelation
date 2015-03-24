@@ -10,8 +10,15 @@ In chronological order :
 - Baseline algo came from the R project with some optimisation for repated paring of vectors.
 - Matrix Algorithm was describe in a [stackoverflow post][4] 
 - CUDA Implementation of both algorithm
-- Multithreading implementation with pthread
+- Multithreading implementation with pthread and OpenMP
 
+This program is very easy to parallelize due to no depency from one result to another, resulting in very little need for synchronization between threads (The only synchronization needed was to manage the task queue between the different threads in a 1-producer n-consumer ).
+
+We are of course assuming : 
+- That there is enough memory to hold in memory both the input and the result data. 
+- Data type used for calculation is float.
+- Multi-thread code do not make any effort toward the processor and use a threadpool of 128 threads.
+- Measured timing highly depend on I/O right now. Will attempt to reduce that dependency in the future. 
 
 ## Measured Timing
 
@@ -38,7 +45,7 @@ for comparison on an Intel [X5690][3]
 - openMP Nested : 115.11
 - No calculation : 9.80
 
-input : 100 x 10000
+input : 100 x 10000 (generated with randomMatrix.pl)
 
 Intel [E5606][1] 
 - Baseline : 11.40 (9.08)
