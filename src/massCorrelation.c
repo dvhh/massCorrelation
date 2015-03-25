@@ -13,11 +13,13 @@ entry point for processing tab separated data to correlation values
 #include <limits.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "correlation.h"
 #include "arrayIO.h"
 
 static void die(const char*);
+static float* readInputVectorBin(FILE*,size_t*,size_t*);
 /**
  * print error message and exit program
  *
@@ -29,13 +31,34 @@ static void die(const char* message) {
 	abort();
 }
 
+static float* readInputVectorBin(FILE* input,size_t* cols,size_t* rows) {
+	size_t out;
+	out=fread(cols,sizeof(size_t),1,input);
+	assert(out==1);
+	if(out!=1) {die("cannot read cols count from input");}
+	out=fread(rows,sizeof(size_t),1,input);
+	assert(out==1);
+	if(out!=1) {die("cannot read rows count from input");}
+	size_t all= *cols * *rows;
+
+	float* result=calloc(all,sizeof(float));
+	out=fread(result,sizeof(float),all,input);
+	assert(out==all);
+	if(out!=all) {die("cannot read all the input matrix, input shorter than expected");}
+
+	return result;
+}
+
 static void showUsage(char* exeName) {
 	fprintf(stderr, 
 		"Usage :\n"
 		"%s < inputFile.txt > output.bin\n"
 		"%s -i inputfile.txt -o outputFile.txt\n"
-		"arguments could be mixed with pipe style calling"
-		, exeName,exeName);
+		"%s -b < inputFile.bin > output.bin\n"
+		"%s -b -i inputFile.bin -o output.bin\n"
+		"arguments could be mixed with pipe style calling\n"
+		"-b flag is to put binary array as input\n"
+		, exeName,exeName,exeName,exeName);
 	exit(0);
 }
 
@@ -45,9 +68,10 @@ int main(int argc,char** argv) {
 	char* inputPath=NULL;
 	char* outputPath=NULL;
 
+	bool binaryFlag=false;
 	int c;
 	opterr=0;
-	while((c = getopt(argc,argv,"i:o:h"))!= -1) {
+	while((c = getopt(argc,argv,"i:o:hb"))!= -1) {
 		switch(c) {
 			case 'i':
 				inputPath=strdup(optarg);
@@ -68,6 +92,9 @@ int main(int argc,char** argv) {
 			case 'h':
 				showUsage(argv[0]);
 				break;
+			case 'b':
+				binaryFlag=true;
+				break;
 			default:
 				showUsage(argv[0]);
 				break;
@@ -82,7 +109,12 @@ int main(int argc,char** argv) {
 	fprintf(stderr,"reading input\n");
 	size_t cols=0;
 	size_t rows=0;
-	float* inputData=readInputVectors(input,&cols,&rows);
+	float* inputData;
+	if(binaryFlag) {
+		inputData=readInputVectorBin(input,&cols,&rows);
+	}else{
+		inputData=readInputVectors(input,&cols,&rows);
+	}
 
 	if(inputPath!=NULL) {
 		free(inputPath);
