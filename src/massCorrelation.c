@@ -15,8 +15,7 @@ entry point for processing tab separated data to correlation values
 #include <unistd.h>
 
 #include "correlation.h"
-
-const size_t lineMax=131072;
+#include "arrayIO.h"
 
 static void die(const char*);
 /**
@@ -28,83 +27,6 @@ static void die(const char*);
 static void die(const char* message) {
 	fprintf(stderr,"%s\n",message);
 	abort();
-}
-
-/**
- *  read input vectors as matrix
- *
- *  @param [in] input 
- *  file stream to read the vectors from
- *
- *  @param [out] cols
- *  output, number of cols read
- *
- *  @param [out] row
- *  output, number of row read
- *
- *  @return read matrix
- **/
-static float* readInputVectors(FILE* input,size_t* cols,size_t* rows) {
-	float* result=NULL;
-	size_t rcols=0;
-	size_t capacity=16;
-	size_t lineRead=0;
-	char line[lineMax];
-	while(fgets(line,lineMax,input)!=NULL) {
-		const size_t lineSize=strlen(line);
-		if(lineSize == lineMax - 1) {
-			die("line too long");
-		}
-		if(result==NULL) {
-			fprintf(stderr,"getting length %zu\n",lineSize);
-			for(size_t i=0;i<lineSize;i++) {
-				if(line[i]=='\t') {
-					rcols++;
-				}
-			}
-			//rcols++; //off by one 
-			size_t size=sizeof(float)*rcols*capacity;
-			fprintf(stderr,"found %zu cols (%zu)\n",rcols,size);
-			result=malloc(size);
-			assert(result!=NULL);
-			if(result==NULL) {
-				die("insuficient memory");
-			}
-		}
-		size_t pos=0;
-		size_t idx=0;
-		for(size_t i=0;i<lineSize;i++) {
-			switch(line[i]) {
-				case '\t':
-					line[i]=0;
-					float value=atof(line+pos);
-					result[lineRead*rcols+idx]=value;
-					idx++;
-					pos=i+1;
-					break;
-				case '\0':
-					pos=lineSize; // force ending
-					break;
-			}
-		}
-		assert(idx==rcols);
-		lineRead++;
-		if(lineRead==capacity) { // automatic grow results
-			capacity += 16;
-			result = realloc(result,sizeof(float)*rcols*capacity);
-			assert(result!=NULL);
-			if(result==NULL) {die("insuficient memory");}
-
-		}
-	}
-	result=realloc(result,sizeof(float)*rcols*lineRead); /// truncate result
-	assert(result!=NULL);
-	if(result==NULL) {die("insuficient memory");}
-	*rows=lineRead;
-	*cols=rcols;
-	fprintf(stderr,"found %zu %zu (%zu)\n",rcols,lineRead,sizeof(float)*rcols*lineRead);
-
-	return(result);
 }
 
 static void showUsage(char* exeName) {

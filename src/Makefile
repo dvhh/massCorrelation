@@ -28,28 +28,25 @@ all : $(ALL)
 clean :
 	rm $(ALL) *.o
 
-$(BIN)/massCorrelation : massCorrelation.o correlationCPU.o
+$(BIN)/massCorrelation : massCorrelation.o arrayIO.o correlationCPU.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-$(BIN)/massCorrelationNone : massCorrelation.o correlationNone.o
+$(BIN)/massCorrelationNone : massCorrelation.o arrayIO.o correlationNone.o
 	$(CC) $(CFLAGS) -o $@ $^ 
 
-$(BIN)/massCorrelationCUDA : massCorrelation.o correlationCUDA.o
+$(BIN)/massCorrelationCUDA : massCorrelation.o arrayIO.o correlationCUDA.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm -L/usr/local/cuda/lib64 -lcudart
 
 #correlationGPU.o : correlationGPU.cu
 #	nvcc -arch compute_20 --ptxas-options=-v --compiler-options "-O2" -c $^ -o $@
 
-$(BIN)/massCorrelationMatrix : massCorrelation.o correlationMatrixCpu.o
+$(BIN)/massCorrelationMatrix : massCorrelation.o arrayIO.o correlationMatrixCpu.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm
 
-#correlationMatrixGpu.o : correlationMatrixGpu.cu
-#	nvcc -arch compute_20 --ptxas-options=-v --compiler-options "-O2" -c $^ -o $@
-
-$(BIN)/massCorrelationMatrixCUDA : massCorrelation.o correlationMatrixCUDA.o
+$(BIN)/massCorrelationMatrixCUDA : massCorrelation.o arrayIO.o correlationMatrixCUDA.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm -L/usr/local/cuda/lib64 -lcudart
 
-$(BIN)/massCorrelationThread : massCorrelation.o correlationCPUThreads.o threadPool.o ringBuffer.o
+$(BIN)/massCorrelationThread : massCorrelation.o arrayIO.o correlationCPUThreads.o threadPool.o ringBuffer.o
 	$(CC) $(CFLAGS) -o $@ $^ -lm -lpthread
 
 $(BIN)/compareBin : compareBin.o
@@ -57,5 +54,9 @@ $(BIN)/compareBin : compareBin.o
 correlationOMP.o : correlationOMP.c
 	$(CC) $(CFLAGS) -c -fopenmp -o $@ $^ 
 
-$(BIN)/massCorrelationOMP : massCorrelation.o correlationOMP.o
+$(BIN)/massCorrelationOMP : massCorrelation.o arrayIO.o correlationOMP.o
 	$(CC) $(CFLAGS) -fopenmp -o $@ $^ -lm
+
+$(BIN)/array2bin : array2bin.o arrayIO.o
+	$(CC) $(CFLAGS) -o $@ $^ 
+
