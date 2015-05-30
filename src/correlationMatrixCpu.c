@@ -92,6 +92,7 @@ extern float* getCorrelation(const float* vectors,const size_t cols,const size_t
 	memcpy(input,vectors,inputSize);
 	normalizeRows(input,cols,rows);
 	float* output=tcrossprod(input,cols,rows);
+	free(input);
 	return output;
 }
 

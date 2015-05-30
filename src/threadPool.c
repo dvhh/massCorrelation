@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "threadPool.h"
 #include "ringBuffer.h"
 
@@ -48,6 +49,7 @@ static void* tp_workerThread(void* arg) {
 
 extern tp_threadpool_t* tp_init(unsigned int count) {
 	tp_threadpool_t *result=malloc(sizeof(tp_threadpool_t));
+	assert(result!=NULL);
 	result->count=count;
 	result->destroying=false;
 	result->jobQueue=rb_init(count*10);
@@ -66,10 +68,12 @@ extern void tp_destroy(tp_threadpool_t* pool) {
 		pthread_join(pool->workers[i],NULL);
 	}
 	rb_destroy(pool->jobQueue);
+	free(pool);
 }
 
 extern void tp_enqueue(tp_threadpool_t* pool,tp_worker_t* worker,void* arg) {
 	tp_task_t *task=malloc(sizeof(tp_task_t));
+	assert(task!=NULL);
 	*task=(tp_task_t){worker,arg};
 	rb_enqueue(pool->jobQueue,task);
 }

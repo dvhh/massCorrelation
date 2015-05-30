@@ -18,6 +18,9 @@ entry point for processing tab separated data to correlation values
 #include "correlation.h"
 #include "arrayIO.h"
 
+#ifndef SIZE_MAX
+#define SIZE_MAX ((size_t)-1)
+#endif
 static void die(const char*);
 static float* readInputVectorBin(FILE*,size_t*,size_t*);
 /**
@@ -39,6 +42,9 @@ static float* readInputVectorBin(FILE* input,size_t* cols,size_t* rows) {
 	out=fread(rows,sizeof(size_t),1,input);
 	assert(out==1);
 	if(out!=1) {die("cannot read rows count from input");}
+	assert((SIZE_MAX/ *cols) > *rows );
+	assert((SIZE_MAX/ *rows) > *cols );
+
 	size_t all= *cols * *rows;
 
 	float* result=calloc(all,sizeof(float));
@@ -129,6 +135,8 @@ int main(int argc,char** argv) {
 
 	fprintf(stderr,"writing output data\n");
 
+	assert((SIZE_MAX/rows*2) > (rows-1));
+	
 	fwrite(outputData,sizeof(float),(rows*(rows-1)/2),output);
 	free(outputData);
 	if(outputPath!=NULL) {
