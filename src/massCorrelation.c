@@ -130,13 +130,13 @@ int main(int argc,char** argv) {
 
 	fprintf(stderr,"read %zu cols ,%zu rows\n",cols,rows);
 	//abort();
+	assert((SIZE_MAX/rows) > ((rows-1)/2));
+
 	float* outputData=getCorrelation(inputData,cols,rows);
 	free(inputData);
 
 	fprintf(stderr,"writing output data\n");
 
-	assert((SIZE_MAX/rows*2) > (rows-1));
-	
 	fwrite(outputData,sizeof(float),(rows*(rows-1)/2),output);
 	free(outputData);
 	if(outputPath!=NULL) {
