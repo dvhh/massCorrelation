@@ -1,4 +1,8 @@
 # massCorrelation
+
+[![Build Status](https://travis-ci.org/dvhh/massCorrelation.svg?branch=master)](https://travis-ci.org/dvhh/massCorrelation)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/5220/badge.svg)](https://scan.coverity.com/projects/5220)
+
 An exercise in writing an efficient correlation calculator
 
 ## Overview
