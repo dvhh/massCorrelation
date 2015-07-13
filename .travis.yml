@@ -1,2 +1,16 @@
 language: c
 
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "IAPFmtyNriZ2BHqXOduex73YGC9eiU1mD2BJGLSIhPSyLToUIm3GVec6XH1khH8OQ7vczGZllPldKGlNmRNlicKPEC1ksChSt8uEsG88IYX3iAB1C20/iQWI0TbYYwNJlmUZ4QMlatUKF2iT3IT10AfmNRuhsYg/IadmNuV/plvU5WL9AnIHdgVHqZSSYddNfqIDw46W7D/MoTPyHe5V/jKNUMitQau0XDimt8IFDSsBW8DJ4snLXjvZ2Tki9vksWc3epELn80c3c4Jb8WjCYZGvrt2OWCc7ZPYSq6cnnHjtxIVNRS6PnsrAppJ8oQ9v3FwRtSYDg1LD9N6FxQrSkeK0RsUu9uHcCB4u274dppCCBHe7sQ1dqGQNIgyoppAK/sL8iw4bVuHwuFfFIFB6M4faJ5ePjamd8fTc11CAxG0OTIDQNzPaEs2SAFSALqLkspwjyauRHFLi+ecuRH5n282KZbdNxd8VPjHcI4jga1Lf1CsN73VyO1BC5YV2RhSkRAVgx/kWA0vy7ZQGuLQ9nSt8rDQZE6IJ4pMHXLzuN+BWN9w3KTkqkyb2ZLruiuEwrZLdN1pck8qJ/XXiNB5EvlIJRs2ylj+T1kmq7OtNQQBPgIJBru0T5rlid7BSHsWzLR1MIv7C6MwHCFpLAbLWkAl70XAPhNfhfCQIRXp4RV4="
+
+addons:
+  coverity_scan:
+    project:
+      name: "dvhh/massCorrelation"
+      description: "Correlation calculation"
+    notification_email: dvhh@yahoo.com
+    build_command: make
+    branch_pattern: coverity_scan
