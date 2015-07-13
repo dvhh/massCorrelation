@@ -14,11 +14,13 @@ entry point for processing tab separated data to correlation values
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "correlation.h"
 #include "arrayIO.h"
 
 #ifndef SIZE_MAX
+#pragma message "using custom SIZE_MAX"
 #define SIZE_MAX ((size_t)-1)
 #endif
 static void die(const char*);
@@ -136,8 +138,8 @@ int main(int argc,char** argv) {
 	free(inputData);
 
 	fprintf(stderr,"writing output data\n");
-
-	fwrite(outputData,sizeof(float),(rows*(rows-(size_t)1)/(size_t)2),output);
+	size_t total=rows*(rows-(size_t)1)/(size_t)2;
+	fwrite(outputData,sizeof(float),total,output);
 	free(outputData);
 	if(outputPath!=NULL) {
 		free(outputPath);
