@@ -138,7 +138,7 @@ int main(int argc,char** argv) {
 	free(inputData);
 
 	fprintf(stderr,"writing output data\n");
-	size_t total=rows*(rows-(size_t)1)/(size_t)2;
+	size_t total=rows/(size_t)2*(rows-(size_t)1);
 	fwrite(outputData,sizeof(float),total,output);
 	free(outputData);
 	if(outputPath!=NULL) {
