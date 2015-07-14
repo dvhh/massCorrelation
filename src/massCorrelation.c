@@ -132,13 +132,15 @@ int main(int argc,char** argv) {
 
 	fprintf(stderr,"read %zu cols ,%zu rows\n",cols,rows);
 	//abort();
-	assert((SIZE_MAX/rows) > ((rows-(size_t)1)/(size_t)2));
+	assert(rows>0);
+	assert(cols>0);
+	assert((SIZE_MAX/(rows-(size_t)1)) > (rows/(size_t)2));
 
 	float* outputData=getCorrelation(inputData,cols,rows);
 	free(inputData);
 
 	fprintf(stderr,"writing output data\n");
-	size_t total=rows*(rows-(size_t)1)/(size_t)2;
+	size_t total=rows/(size_t)2*(rows-(size_t)1);
 	fwrite(outputData,sizeof(float),total,output);
 	free(outputData);
 	if(outputPath!=NULL) {
